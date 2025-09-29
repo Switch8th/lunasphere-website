@@ -19,7 +19,7 @@ const rateLimitMiddleware = require('./middleware/rateLimit');
 const apiRoutes = require('./routes/api');
 const contactRoutes = require('./routes/contact');
 const healthRoutes = require('./routes/health');
-const lunasphereApi = require('./middleware/lunasphere-api');
+const servicesApiMiddleware = require('./middleware/lunasphere-api');
 
 // Initialize Express app
 const app = express();
@@ -171,7 +171,8 @@ app.use('/assets', express.static(path.join(__dirname, '../assets'), {
 app.use('/health', healthRoutes);
 
 // API routes
-app.use('/api', lunasphereApi, apiRoutes);
+app.use('/api', apiRoutes);
+app.use('/api/services', servicesApiMiddleware);
 
 // Main route - serve index.html
 app.get('/', (req, res) => {
