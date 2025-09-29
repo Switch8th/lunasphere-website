@@ -4,8 +4,8 @@
   "description": "LunaSphere - Professional Web Solutions and Digital Innovation",
   "main": "public/index.html",
   "scripts": {
-    "start": "node server/app.js",
-    "dev": "nodemon server/app.js",
+    "start": "vercel dev --listen 3000",
+    "dev": "vercel dev --listen 3000",
     "build": "npm run build:css && npm run build:js",
     "build:css": "postcss css/styles.css -o public/css/styles.min.css --use autoprefixer cssnano",
     "build:js": "terser js/*.js -o public/js/bundle.min.js --compress --mangle",
@@ -125,16 +125,4 @@
       "no-var": "error"
     }
   },
-  "nodemonConfig": {
-    "watch": [
-      "server/"
-    ],
-    "ext": "js,json",
-    "ignore": [
-      "server/logs/",
-      "node_modules/",
-      "public/"
-    ],
-    "exec": "node server/app.js"
-  }
 }
