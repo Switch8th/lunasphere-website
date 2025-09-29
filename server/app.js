@@ -19,6 +19,7 @@ const rateLimitMiddleware = require('./middleware/rateLimit');
 const apiRoutes = require('./routes/api');
 const contactRoutes = require('./routes/contact');
 const healthRoutes = require('./routes/health');
+const lunasphereApi = require('./middleware/lunasphere-api');
 
 // Initialize Express app
 const app = express();
@@ -170,12 +171,20 @@ app.use('/assets', express.static(path.join(__dirname, '../assets'), {
 app.use('/health', healthRoutes);
 
 // API routes
-app.use('/api', apiRoutes);
-app.use('/api/contact', contactRoutes);
+app.use('/api', lunasphereApi, apiRoutes);
 
 // Main route - serve index.html
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../index.html'));
+    const filePath = path.join(__dirname, '../index.html');
+    console.log('🔍 Serving HTML from:', filePath);
+    
+    // Disable caching in development
+    if (NODE_ENV === 'development') {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    }
+    res.sendFile(filePath);
 });
 
 // Handle client-side routing (SPA support)
@@ -192,6 +201,12 @@ app.get('*', (req, res, next) => {
     }
     
     // Serve index.html for client-side routing
+    // Disable caching in development
+    if (NODE_ENV === 'development') {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+        res.setHeader('Pragma', 'no-cache');
+        res.setHeader('Expires', '0');
+    }
     res.sendFile(path.join(__dirname, '../index.html'));
 });
 
@@ -214,6 +229,17 @@ app.use((req, res) => {
         error: 'Page not found',
         message: `The requested page ${req.originalUrl} does not exist`
     });
+});
+
+// Start server
+const server = app.listen(PORT, () => {
+    logger.info(`🌙 LunaSphere server running on port ${PORT}`);
+    logger.info(`🚀 Environment: ${NODE_ENV}`);
+    logger.info(`🔗 Local: http://localhost:${PORT}`);
+    
+    if (NODE_ENV === 'development') {
+        logger.info('🛠️  Development mode - auto-restart enabled');
+    }
 });
 
 // Graceful shutdown
@@ -242,17 +268,6 @@ process.on('uncaughtException', (error) => {
 process.on('unhandledRejection', (reason, promise) => {
     logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
     process.exit(1);
-});
-
-// Start server
-const server = app.listen(PORT, () => {
-    logger.info(`🌙 LunaSphere server running on port ${PORT}`);
-    logger.info(`🚀 Environment: ${NODE_ENV}`);
-    logger.info(`🔗 Local: http://localhost:${PORT}`);
-    
-    if (NODE_ENV === 'development') {
-        logger.info('🛠️  Development mode - auto-restart enabled');
-    }
 });
 
 // Export app for testing

@@ -510,7 +510,6 @@ function init() {
     initPerformanceMonitoring();
     initErrorHandling();
     initAccessibility();
-    fetchServices();
 }
 
 // ===== EVENT LISTENERS =====
@@ -549,54 +548,15 @@ function throttle(func, limit) {
     };
 }
 
-// Service worker registration disabled for development
-
-
-async function fetchServices() {
-    console.log('Fetching services...');
-    try {
-        const response = await fetch('/api/services');
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        const services = await response.json();
-        console.log('Services fetched:', services);
-        
-        const servicesGrid = document.getElementById('services-grid');
-        const noServicesMessage = document.querySelector('.no-services-message');
-
-        if (services.length > 0) {
-            if (noServicesMessage) {
-                noServicesMessage.style.display = 'none';
-            }
-            
-            services.forEach(service => {
-                const serviceCard = document.createElement('div');
-                serviceCard.className = 'service-card fade-in-up';
-                
-                serviceCard.innerHTML = `
-                    <div class="service-icon">
-                        <img src="${service.imageUrl}" alt="${service.title}" />
-                    </div>
-                    <div class="service-content">
-                        <h3 class="service-title">${service.title}</h3>
-                        <p class="service-description">${service.description}</p>
-                        <a href="${service.downloadUrl}" class="btn btn-primary" download>
-                            Download PDF <i class="fas fa-download"></i>
-                        </a>
-                    </div>
-                `;
-                
-                servicesGrid.appendChild(serviceCard);
+// ===== SERVICE WORKER REGISTRATION =====
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+                console.log('SW registered: ', registration);
+            })
+            .catch((registrationError) => {
+                console.log('SW registration failed: ', registrationError);
             });
-        } else {
-            if (noServicesMessage) {
-                noServicesMessage.style.display = 'block';
-            }
-        }
-    } catch (error) {
-        console.error('Failed to fetch services:', error);
-        const servicesGrid = document.getElementById('services-grid');
-        servicesGrid.innerHTML = '<p style="color: red; text-align: center;">Error loading services. Please try again later.</p>';
-    }
+    });
 }

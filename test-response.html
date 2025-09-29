@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-<!-- DEBUG: File updated at 2025-09-24T02:01:00Z - LOGOUT BUTTON SHOULD BE FIRST -->
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,8 +7,8 @@
     <meta name="keywords" content="web development, digital solutions, technology, innovation, LunaSphere">
     <meta name="author" content="LunaSphere Team">
     
-    <!-- Security Headers disabled for development -->
-    <!-- <meta http-equiv="Content-Security-Policy" content="..."> -->
+    <!-- Security Headers -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -262,13 +261,6 @@
                     <input type="password" id="login-password" name="password" required>
                     <label for="login-password">Password</label>
                 </div>
-                <div class="form-group">
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="remember-me" name="rememberMe" checked>
-                        <span class="checkmark"></span>
-                        Remember me for 30 days
-                    </label>
-                </div>
                 <button type="submit" class="btn btn-primary">
                     Login
                     <span class="btn-icon">🔑</span>
@@ -404,106 +396,10 @@
         </div>
     </div>
 
-    <!-- Inline test script to bypass CSP -->
-    <script>
-        console.log('🧪 INLINE SCRIPT WORKING!');
-        
-        // Quick test of basic functionality
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('📄 DOM LOADED!');
-            
-            // Test API connectivity
-            fetch('/api/users')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('✅ API TEST SUCCESS:', data);
-                    
-                    // Show users in admin panel if present
-                    const usersList = document.getElementById('users-list');
-                    if (usersList && data.length > 0) {
-                        usersList.innerHTML = data.map(user => `
-                            <div class="user-item">
-                                <div class="user-info">
-                                    <div class="user-name">${user.username}</div>
-                                    <div class="user-role">${user.role}</div>
-                                </div>
-                            </div>
-                        `).join('');
-                    }
-                })
-                .catch(error => {
-                    console.log('❌ API TEST FAILED:', error);
-                });
-            
-            // Basic login functionality
-            const loginForm = document.getElementById('login-form');
-            if (loginForm) {
-                loginForm.addEventListener('submit', async function(e) {
-                    e.preventDefault();
-                    const username = document.getElementById('login-username').value;
-                    const password = document.getElementById('login-password').value;
-                    
-                    console.log('🔐 Trying login:', username);
-                    
-                    try {
-                        const response = await fetch('/api/login', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify({ username, password })
-                        });
-                        
-                        const result = await response.json();
-                        console.log('Login result:', result);
-                        
-                        if (result.success) {
-                            // Show admin panel for admin users
-                            if (result.user.role === 'super_admin' || result.user.role === 'admin') {
-                                const adminPanel = document.getElementById('admin-panel');
-                                if (adminPanel) {
-                                    adminPanel.style.display = 'block';
-                                }
-                            }
-                            
-                            // Hide login modal
-                            const loginModal = document.getElementById('login-modal');
-                            if (loginModal) {
-                                loginModal.style.display = 'none';
-                            }
-                            
-                            alert('Login successful!');
-                        } else {
-                            alert('Login failed: ' + (result.error || 'Unknown error'));
-                        }
-                    } catch (error) {
-                        console.error('Login error:', error);
-                        alert('Login failed: Network error');
-                    }
-                });
-            }
-            
-            // Show login modal
-            const loginBtn = document.getElementById('login-btn');
-            const loginModal = document.getElementById('login-modal');
-            if (loginBtn && loginModal) {
-                loginBtn.addEventListener('click', function() {
-                    loginModal.style.display = 'block';
-                });
-            }
-            
-            // Close login modal
-            const closeLogin = document.getElementById('close-login');
-            if (closeLogin && loginModal) {
-                closeLogin.addEventListener('click', function() {
-                    loginModal.style.display = 'none';
-                });
-            }
-        });
-    </script>
-    
-    <!-- Original Scripts (commented out for now) -->
-    <!-- <script src="js/main.js"></script>
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
     <script src="js/animations.js"></script>
     <script src="js/forms.js"></script>
-    <script src="js/auth.js"></script> -->
+    <script src="js/auth.js"></script>
 </body>
 </html>

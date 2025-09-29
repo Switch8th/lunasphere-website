@@ -82,7 +82,7 @@ const sqlInjectionProtection = (req, res, next) => {
     const checkValue = (value) => {
         if (typeof value === 'string') {
             const sqlPatterns = [
-                /('|(\\')|(--)|(-{2})|(;)|(\|)|(\*)|(%)|(\+)/i,
+                /('|(\\')|(--)|(-{2})|(;)|(\|)|(\*)|(%)|(\+))/i,
                 /(select|insert|update|delete|drop|create|alter|exec|execute|union|script)/i,
                 /(<|>|script|javascript|vbscript|onload|onerror)/i
             ];

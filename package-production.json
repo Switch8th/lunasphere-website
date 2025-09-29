@@ -1,0 +1,79 @@
+{
+  "name": "lunasphere-website",
+  "version": "1.0.0",
+  "description": "LunaSphere - Professional Web Solutions and Digital Innovation",
+  "main": "production-server.js",
+  "scripts": {
+    "start": "NODE_ENV=production node production-server.js",
+    "dev": "NODE_ENV=development node production-server.js",
+    "pm2:start": "pm2 start production-server.js --name lunasphere-website --env production",
+    "pm2:stop": "pm2 stop lunasphere-website",
+    "pm2:restart": "pm2 restart lunasphere-website",
+    "pm2:delete": "pm2 delete lunasphere-website",
+    "pm2:logs": "pm2 logs lunasphere-website",
+    "pm2:monit": "pm2 monit",
+    "test": "echo 'No tests specified' && exit 0",
+    "health": "curl -f http://localhost:3000/health || exit 1"
+  },
+  "keywords": [
+    "website",
+    "web-development",
+    "digital-agency",
+    "responsive",
+    "modern",
+    "professional",
+    "nodejs",
+    "express"
+  ],
+  "author": "LunaSphere Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "bcryptjs": "^2.4.3",
+    "uuid": "^9.0.1",
+    "express-rate-limit": "^7.1.5"
+  },
+  "devDependencies": {
+    "pm2": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lunasphere/website.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lunasphere/website/issues"
+  },
+  "homepage": "https://www.lunasphere.top",
+  "pm2": {
+    "apps": [
+      {
+        "name": "lunasphere-website",
+        "script": "production-server.js",
+        "instances": 1,
+        "exec_mode": "cluster",
+        "env": {
+          "NODE_ENV": "production",
+          "PORT": 3000
+        },
+        "env_production": {
+          "NODE_ENV": "production",
+          "PORT": 3000,
+          "ADMIN_USERNAME": "admin",
+          "ADMIN_PASSWORD": "lunasphere2025!"
+        },
+        "error_file": "./logs/err.log",
+        "out_file": "./logs/out.log",
+        "log_file": "./logs/combined.log",
+        "time": true,
+        "autorestart": true,
+        "max_restarts": 10,
+        "min_uptime": "10s",
+        "max_memory_restart": "500M"
+      }
+    ]
+  }
+}

@@ -1,0 +1,14 @@
+[
+    {
+      "title": "Modern Web Development",
+      "description": "Building responsive, high-performance websites with modern technologies.",
+      "imageUrl": "images/web-dev.svg",
+      "downloadUrl": "/assets/Modern Web Development.pdf"
+    },
+    {
+      "title": "Strategic Digital Transformation",
+      "description": "Innovative strategies to drive growth and efficiency in a digital-first world.",
+      "imageUrl": "images/digital-transformation.svg",
+      "downloadUrl": "/assets/Strategic Digital Transformation.pdf"
+    }
+]

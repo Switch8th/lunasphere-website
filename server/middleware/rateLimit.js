@@ -37,15 +37,7 @@ const createRateLimiter = (options) => {
             // Skip rate limiting for health checks
             return req.path.startsWith('/health');
         },
-        onLimitReached: (req, res, options) => {
-            logger.warn('Rate limit reached', {
-                ip: req.ip,
-                url: req.originalUrl,
-                userAgent: req.get('User-Agent'),
-                limit: options.max,
-                windowMs: options.windowMs
-            });
-        }
+        // onLimitReached is deprecated in express-rate-limit v7
     });
 };
 
